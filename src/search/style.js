@@ -27,6 +27,11 @@ export const HeadTop = styled.div`
 	position: relative;
 	margin-top: -20px;
 	height: 50px;
+	font-size: 18px;
+	.routingCount{
+		font-size: 20px;
+		color: red;
+	}
 `
 export const SearchContainer = styled.div`
     overflow: hidden;

@@ -5,7 +5,7 @@ SearchInput,
 SearchButton
 } from './style'
 const SearchForm = props => {
-  const { handleSubmit, pristine, reset, submitting } = props;
+  const { handleSubmit} = props;
   return (
     <form onSubmit={handleSubmit}>
     <SearchInput>
