@@ -65,9 +65,25 @@ let canRun = true;
 const mapStates = (state) =>({
 	routings:state.getIn(['search','routings'])
 });
+var WS;
 const mapActions = (dispatch) =>({
 	
 	handleSubmit(req){
+		if(WS){
+			WS.close();
+			
+		}
+		WS = new WebSocket('ws://localhost:9688/websocket');
+		WS.onmessage = msg =>{
+			if(msg){
+				let data = msg.data;
+				data = JSON.parse(data);
+				if (data && data.extension) {
+					let routings = data.extension.msg;
+					dispatch(actionCreator.showRoutings(routings))
+				}
+			}
+		}
 		if (canRun) {
 			canRun = false;
 			dispatch(actionCreator.clearRoutings());
@@ -85,7 +101,11 @@ const mapActions = (dispatch) =>({
 			let message = {};
 			message.code = 10000;
 			message.extension = json;
-			axios.get('/search/response.json',request)
+			let sendMs = JSON.stringify(message);
+			WS.onopen= () =>{
+				WS.send(sendMs);
+			};
+			axios.post('/hello/search',request)
 			.then((res) => {
 				var arr = [];
 				let response = res.data;
